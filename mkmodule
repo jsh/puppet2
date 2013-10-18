@@ -1,0 +1,31 @@
+#!/bin/bash -eux
+
+module=/etc/puppet/modules/$1
+manifest=$module/manifests/init.pp
+test=$module/tests/init.pp
+site=/etc/puppet/manifests/site.pp
+
+cd /etc/puppet
+
+[ ! -d $module ]
+mkdir -p $module/{manifests,tests}
+echo "include $1" > $test
+cat <<EOF > $manifest
+class $1 {
+  package { '$1': ensure => latest }
+}
+EOF
+vi $manifest
+puppet parser validate $test
+puppet apply --noop $test
+puppet lint $test
+
+shopt -s globstar
+mv --backup=numbered $site $site.bak
+cat /etc/puppet/modules/**/tests/init.pp > $site
+
+time puppet apply $site
+git add .
+git commit -m"new module $1"
+
+exit 0
