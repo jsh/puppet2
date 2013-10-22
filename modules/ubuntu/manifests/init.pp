@@ -29,7 +29,6 @@ class ubuntu {
 
   exec { 'add-puppetlabs-repo':
     command => 'add-puppetlabs-repo',
-    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     require => File['add-puppetlabs-repo'],
   }
 }
