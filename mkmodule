@@ -20,9 +20,9 @@ puppet parser validate $test
 puppet apply --noop $test
 puppet lint $test
 
-shopt -s globstar
-mv --backup=numbered $site $site.bak
-cat /etc/puppet/modules/**/tests/init.pp > $site
+#shopt -s globstar
+#mv --backup=numbered $site $site.bak
+#cat /etc/puppet/modules/**/tests/init.pp > $site
 
 time puppet apply $site
 git add .
